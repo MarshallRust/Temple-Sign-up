@@ -5,11 +5,11 @@ let selectedDate = null
 let selectedSlot = null
 const booked = {}
 
-// current month/year
-const year = new Date().getFullYear()
-const month = new Date().getMonth()
+// ✅ HARD CODED TO MARCH 2026
+const year = 2026
+const month = 2   // March = 2 because months are 0-indexed
 
-for (let i = 1; i <= 30; i++) {
+for (let i = 1; i <= 31; i++) {
     const d = document.createElement('div')
     const dateObj = new Date(year, month, i)
     const day = dateObj.getDay() // 0 = Sunday, 1 = Monday
