@@ -12,6 +12,7 @@ body {
 .container {
   background: white;
   width: 900px;
+  max-width: 100%;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   display: flex;
@@ -46,10 +47,10 @@ body {
   margin-bottom: 20px;
 }
 
-/* ⭐ CALENDAR */
+/* ⭐ CALENDAR (FULLY FLUID) */
 .calendar {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -104,39 +105,42 @@ button:hover {
   background: #4f46e5;
 }
 
-/* ⭐ MOBILE RESPONSIVE (FIXED STACKING) */
+/* ⭐ MOBILE RESPONSIVE (FULLY FLUID + STACKED) */
 @media (max-width: 768px) {
 
   body {
     align-items: flex-start;
-    padding: 10px;
+    padding: 12px;
     height: auto;
   }
 
   .container {
     width: 100%;
     flex-direction: column;
+    border-radius: 12px;
+    padding: 0;
   }
 
-  .left {
-    width: 100%;
-    border-right: none;
-    border-bottom: 1px solid #eee;
-    padding: 20px;
-  }
-
+  .left,
   .right {
     width: 100%;
     padding: 20px;
   }
 
+  .left {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+
   .calendar {
-    gap: 8px;
+    gap: 6px;
+    padding-right: 10px;
+    padding-left: 4px;
   }
 
   .day {
-    padding: 12px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 15px;
   }
 
   input {
