@@ -1,8 +1,8 @@
 const calendar = document.getElementById('calendar')
 const formArea = document.getElementById('formArea')
+const loader = document.getElementById('loader')
 
-// ⭐ YOUR GOOGLE SHEETS API
-const API_URL = "https://script.google.com/macros/s/AKfycbws6-Fv70GFTiypIncT5Ic19tfjd7ZVLgfud4ECEsSDyBaNhz7eQaML1KABbW87YiXN/exec"
+const API_URL = "https://script.google.com/macros/s/AKfycbyCj0Xg5nV-4m0qsr0N_8uv3mt2LWMjdumXNmXHj6yXzy6Db9_qkX2xnDHvoqtTKhsk/exec"
 
 let selectedDate = null
 let selectedElement = null
@@ -11,22 +11,25 @@ const booked = {}
 const year = 2026
 const month = 2
 
-// ⭐ Load booked dates from Google Sheet
+loader.style.display = "flex"
+
 fetch(API_URL)
   .then(res => res.text())
   .then(text => {
-      try {
-          const data = JSON.parse(text)
-          data.forEach(d => booked[d] = true)
-      } catch(e){
-          console.log("API returned non JSON:", text)
-      }
-      buildCalendar()
+    try {
+      const data = JSON.parse(text)
+      data.forEach(d => booked[d] = true)
+    } catch(e){}
+    loader.style.display = "none"
+    buildCalendar()
   })
-  .catch(() => buildCalendar())
+  .catch(() => {
+    loader.style.display = "none"
+    buildCalendar()
+  })
 
-// ⭐ Build calendar
 function buildCalendar(){
+    calendar.innerHTML = ""
     for (let i = 1; i <= 31; i++) {
         const d = document.createElement('div')
         const dateObj = new Date(year, month, i)
@@ -45,7 +48,6 @@ function buildCalendar(){
     }
 }
 
-// ⭐ Select date
 function selectDate(date, el){
     if(el.classList.contains('booked')) return
 
@@ -60,38 +62,56 @@ function selectDate(date, el){
     formArea.style.display = 'block'
 }
 
-// ⭐ Confirm booking
 function confirmBooking(){
     if(!selectedDate) return alert('Select a date')
 
     const name = document.getElementById("nameInput").value
+    const email = document.getElementById("emailInput").value
     const time = document.getElementById("timeInput").value
     const ordinance = document.getElementById("ordinanceInput").value
     const family = document.getElementById("familyInput").value
 
-    // ⭐ Send booking to Google Sheet
+    loader.style.display = "flex"
+    calendar.style.display = "none"
+
     fetch(API_URL, {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: new URLSearchParams({
-        date: selectedDate,
-        name: name,
-        time: time,
-        ordinance: ordinance,
-        family: family
-    }).toString()
-})
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({
+            date: selectedDate,
+            name: name,
+            email: email,
+            time: time,
+            ordinance: ordinance,
+            family: family
+        }).toString()
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.status === "duplicate"){
+            loader.style.display = "none"
+            calendar.style.display = "grid"
+            alert("Sorry, this date was already booked.")
+            return
+        }
 
-    alert(`Booked March ${selectedDate}, 2026`)
+        booked[selectedDate] = true
+        selectedElement.classList.remove('selected')
+        selectedElement.classList.add('booked')
 
-    booked[selectedDate] = true
-    selectedElement.classList.remove('selected')
-    selectedElement.classList.add('booked')
+        selectedDate = null
+        selectedElement = null
+        formArea.style.display = 'none'
 
-    selectedDate = null
-    selectedElement = null
-    formArea.style.display = 'none'
+        loader.style.display = "none"
+        calendar.style.display = "grid"
+        buildCalendar()
+    })
+    .catch(() => {
+        loader.style.display = "none"
+        calendar.style.display = "grid"
+        buildCalendar()
+    })
 }

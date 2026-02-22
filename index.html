@@ -1,35 +1,43 @@
-<!-- index.html -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Calendar</title>
+<title>Temple Appointment</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
 <div class="container">
-<div class="left" style="display:flex;flex-direction:column;justify-content:space-between;">
-<div>
-<div class="title">Temple Appointment</div>
-<div class="subtitle">Select a date</div>
-</div>
-<small>Please send your pictures to (435)278-4347 or computers.r.rust@gmail.com</small>
-</div>
-<div class="right">
-<div class="calendar" id="calendar"></div>
+  <div class="left">
+    <div>
+      <div class="title">Temple Appointment</div>
+      <div class="subtitle">Select a date</div>
+    </div>
+    <small>please send your pictures to (435)278-4347 or computers.r.rust@gmail.com</small>
+  </div>
 
-<div id="formArea" style="display:none; margin-top:20px;">
-<input id="nameInput" placeholder="Names" />
-<input id="timeInput" placeholder="Appointment time" />
-<input id="ordinanceInput" placeholder="Ordinance type" />
-<input id="familyInput" placeholder="Number of Family Names" />
+  <div class="right">
+
+    <div id="loader">
+      <img src="loading.gif" alt="loading">
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+
+    <div id="formArea" style="display:none; margin-top:20px;">
+      <input id="nameInput" placeholder="Names">
+      <input id="emailInput" placeholder="Email">
+      <input id="timeInput" placeholder="Appointment time">
+      <input id="ordinanceInput" placeholder="Ordinance type">
+      <input id="familyInput" placeholder="Number of Family Names">
+    </div>
+
+    <button onclick="confirmBooking()">Confirm Booking</button>
+
+  </div>
 </div>
 
-<button onclick="confirmBooking()">Confirm Booking</button>
-</div>
-</div>
 <script src="script.js"></script>
 </body>
 </html>
