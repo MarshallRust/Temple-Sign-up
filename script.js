@@ -13,10 +13,15 @@ const month = 2
 
 // ⭐ Load booked dates from Google Sheet
 fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    data.forEach(d => booked[d] = true)
-    buildCalendar()
+  .then(res => res.text())
+  .then(text => {
+      try {
+          const data = JSON.parse(text)
+          data.forEach(d => booked[d] = true)
+      } catch(e){
+          console.log("API returned non JSON:", text)
+      }
+      buildCalendar()
   })
   .catch(() => buildCalendar())
 
@@ -66,15 +71,19 @@ function confirmBooking(){
 
     // ⭐ Send booking to Google Sheet
     fetch(API_URL, {
-        method: "POST",
-        body: new URLSearchParams({
-            date: selectedDate,
-            name: name,
-            time: time,
-            ordinance: ordinance,
-            family: family
-        })
-    })
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: new URLSearchParams({
+        date: selectedDate,
+        name: name,
+        time: time,
+        ordinance: ordinance,
+        family: family
+    }).toString()
+})
 
     alert(`Booked March ${selectedDate}, 2026`)
 
