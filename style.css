@@ -1,20 +1,150 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f5f7fb;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-/* styles.css */
-body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;margin:0;display:flex;justify-content:center;align-items:center;height:100vh}
-.container{background:white;width:900px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.1);display:flex;overflow:hidden}
-.left{width:40%;padding:40px;border-right:1px solid #eee}
-.right{width:60%;padding:40px}
-.title{font-size:22px;font-weight:bold;margin-bottom:10px}
-.subtitle{color:#666;margin-bottom:20px}
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
-.day{padding:12px;border-radius:10px;background:#eef2ff;text-align:center;cursor:pointer;transition:.2s}
-.day:hover{background:#c7d2fe}
-.day.booked{background:#e5e7eb;color:#aaa;cursor:not-allowed}
-button{margin-top:20px;width:100%;padding:12px;border:none;background:#6366f1;color:white;border-radius:8px;font-size:16px;cursor:pointer}
-button:hover{background:#4f46e5}
-input{width:100%;padding:10px;margin-top:10px;border-radius:8px;border:1px solid #ddd}
+/* ⭐ MAIN CONTAINER */
+.container {
+  background: white;
+  width: 900px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  display: flex;
+  overflow: hidden;
+}
+
+/* ⭐ LEFT PANEL */
+.left {
+  width: 40%;
+  padding: 40px;
+  border-right: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ⭐ RIGHT PANEL */
+.right {
+  width: 60%;
+  padding: 40px;
+}
+
+/* ⭐ TEXT */
+.title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* ⭐ CALENDAR */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+
+.day {
+  padding: 12px;
+  border-radius: 10px;
+  background: #eef2ff;
+  text-align: center;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.day:hover {
+  background: #c7d2fe;
+}
+
+.day.booked {
+  background: #e5e7eb;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
 .day.selected {
   background: #6366f1;
   color: white;
   transform: scale(1.05);
+}
+
+/* ⭐ FORM */
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* ⭐ BUTTON */
+button {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #6366f1;
+  color: white;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #4f46e5;
+}
+
+/* ⭐ MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+  body {
+    align-items: flex-start;
+    padding: 10px;
+    height: auto;
+  }
+
+  .container {
+    width: 100%;
+    flex-direction: column;
+    border-radius: 12px;
+  }
+
+  .left {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding: 20px;
+  }
+
+  .right {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .calendar {
+    gap: 6px;
+  }
+
+  .day {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  input {
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 16px;
+  }
 }
