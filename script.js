@@ -1,61 +1,88 @@
 const calendar = document.getElementById('calendar')
-const slotsDiv = document.getElementById('slots')
+const formArea = document.getElementById('formArea')
+
+// ⭐ YOUR GOOGLE SHEETS API
+const API_URL = "https://script.google.com/macros/s/AKfycbws6-Fv70GFTiypIncT5Ic19tfjd7ZVLgfud4ECEsSDyBaNhz7eQaML1KABbW87YiXN/exec"
 
 let selectedDate = null
-let selectedSlot = null
+let selectedElement = null
 const booked = {}
 
-// ✅ HARD CODED TO MARCH 2026
 const year = 2026
-const month = 2   // March = 2 because months are 0-indexed
+const month = 2
 
-for (let i = 1; i <= 31; i++) {
-    const d = document.createElement('div')
-    const dateObj = new Date(year, month, i)
-    const day = dateObj.getDay() // 0 = Sunday, 1 = Monday
+// ⭐ Load booked dates from Google Sheet
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    data.forEach(d => booked[d] = true)
+    buildCalendar()
+  })
+  .catch(() => buildCalendar())
 
-    d.className = 'day'
-    d.innerText = i
+// ⭐ Build calendar
+function buildCalendar(){
+    for (let i = 1; i <= 31; i++) {
+        const d = document.createElement('div')
+        const dateObj = new Date(year, month, i)
+        const day = dateObj.getDay()
 
-    // Grey out Sundays & Mondays
-    if (day === 0 || day === 1) {
-        d.classList.add('booked')
-    } else {
-        d.onclick = () => selectDate(i, d)
-    }
+        d.className = 'day'
+        d.innerText = i
 
-    calendar.appendChild(d)
-}
-
-function selectDate(date, el) {
-    if (el.classList.contains('booked')) return
-
-    selectedDate = date
-    slotsDiv.innerHTML = ''
-
-    const times = ['9:00 AM','10:00 AM','11:00 AM','1:00 PM','2:00 PM','3:00 PM']
-
-    times.forEach(t => {
-        const s = document.createElement('div')
-        s.className = 'slot'
-
-        if (booked[date]?.includes(t)) s.classList.add('booked')
-
-        s.innerText = t
-        s.onclick = () => {
-            if (!s.classList.contains('booked')) selectedSlot = t
+        if (day === 0 || day === 1 || booked[i]) {
+            d.classList.add('booked')
+        } else {
+            d.onclick = () => selectDate(i, d)
         }
 
-        slotsDiv.appendChild(s)
-    })
+        calendar.appendChild(d)
+    }
 }
 
-function confirmBooking() {
-    if (!selectedDate || !selectedSlot) return alert('Select date and time')
+// ⭐ Select date
+function selectDate(date, el){
+    if(el.classList.contains('booked')) return
 
-    if (!booked[selectedDate]) booked[selectedDate] = []
-    booked[selectedDate].push(selectedSlot)
+    if(selectedElement){
+        selectedElement.classList.remove('selected')
+    }
 
-    alert('Booked ' + selectedDate + ' at ' + selectedSlot)
-    selectDate(selectedDate, calendar.children[selectedDate - 1])
+    el.classList.add('selected')
+    selectedElement = el
+    selectedDate = date
+
+    formArea.style.display = 'block'
+}
+
+// ⭐ Confirm booking
+function confirmBooking(){
+    if(!selectedDate) return alert('Select a date')
+
+    const name = document.getElementById("nameInput").value
+    const time = document.getElementById("timeInput").value
+    const ordinance = document.getElementById("ordinanceInput").value
+    const family = document.getElementById("familyInput").value
+
+    // ⭐ Send booking to Google Sheet
+    fetch(API_URL, {
+        method: "POST",
+        body: new URLSearchParams({
+            date: selectedDate,
+            name: name,
+            time: time,
+            ordinance: ordinance,
+            family: family
+        })
+    })
+
+    alert(`Booked March ${selectedDate}, 2026`)
+
+    booked[selectedDate] = true
+    selectedElement.classList.remove('selected')
+    selectedElement.classList.add('booked')
+
+    selectedDate = null
+    selectedElement = null
+    formArea.style.display = 'none'
 }

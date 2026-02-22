@@ -9,13 +9,23 @@
 </head>
 <body>
 <div class="container">
-<div class="left">
-<div class="title">30 Minute Meeting</div>
-<div class="subtitle">Select a date and time</div>
+<div class="left" style="display:flex;flex-direction:column;justify-content:space-between;">
+<div>
+<div class="title">Temple Appointment</div>
+<div class="subtitle">Select a date</div>
+</div>
+<small>Please send your pictures to (435)278-4347 or computers.r.rust@gmail.com</small>
 </div>
 <div class="right">
 <div class="calendar" id="calendar"></div>
-<div class="slots" id="slots"></div>
+
+<div id="formArea" style="display:none; margin-top:20px;">
+<input id="nameInput" placeholder="Names" />
+<input id="timeInput" placeholder="Appointment time" />
+<input id="ordinanceInput" placeholder="Ordinance type" />
+<input id="familyInput" placeholder="Number of Family Names" />
+</div>
+
 <button onclick="confirmBooking()">Confirm Booking</button>
 </div>
 </div>
