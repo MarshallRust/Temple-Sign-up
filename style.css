@@ -65,7 +65,7 @@ body {
 
 .day.booked {
   background: #8ab1ff;
-  color: #aaa;
+  color: #98cdff;
   cursor: not-allowed;
 }
 
