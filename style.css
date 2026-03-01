@@ -65,14 +65,18 @@ body {
 
 .day.booked {
   background: #aac7ff;
-  color: #000000;
-  cursor: not-allowed;
 }
 
 .day.selected {
   background: #6366f1;
   color: white;
   transform: scale(1.05);
+}
+
+.day.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 input {
@@ -111,6 +115,43 @@ button:hover {
   width: 120px;
   height: 120px;
   object-fit: contain;
+}
+
+.legend {
+  margin-top: 25px;
+}
+
+.legend-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.legend-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  margin-right: 10px;
+}
+
+.legend-box.available {
+  background: #eef2ff;
+}
+
+.legend-box.booked {
+  background: #aac7ff;
+}
+
+
+.legend-box.disabled {
+  background: #e5e7eb;
 }
 
 @media (max-width: 768px) {

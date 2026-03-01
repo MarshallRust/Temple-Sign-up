@@ -2,7 +2,7 @@ const calendar = document.getElementById('calendar')
 const formArea = document.getElementById('formArea')
 const loader = document.getElementById('loader')
 
-const API_URL = "https://script.google.com/macros/s/AKfycbyCj0Xg5nV-4m0qsr0N_8uv3mt2LWMjdumXNmXHj6yXzy6Db9_qkX2xnDHvoqtTKhsk/exec"
+const API_URL = "https://script.google.com/macros/s/AKfycbxlG3kW0SyvLfr817VTSHrj2CPiP9cZQS70Hr60nKSVIFtNyTSwU9dVjSkwgEWp7Rxx/exec"
 
 let selectedDate = null
 let selectedElement = null
@@ -38,9 +38,12 @@ function buildCalendar(){
         d.className = 'day'
         d.innerText = i
 
-        if (day === 0 || day === 1 || booked[i]) {
-            d.classList.add('booked')
+        if (day === 0 || day === 1) {
+            d.classList.add('disabled')
         } else {
+            if (booked[i]) {
+                d.classList.add('booked')
+            }
             d.onclick = () => selectDate(i, d)
         }
 
@@ -49,7 +52,7 @@ function buildCalendar(){
 }
 
 function selectDate(date, el){
-    if(el.classList.contains('booked')) return
+    if(el.classList.contains('disabled')) return
 
     if(selectedElement){
         selectedElement.classList.remove('selected')
@@ -89,17 +92,13 @@ function confirmBooking(){
         }).toString()
     })
     .then(res => res.json())
-    .then(data => {
-        if(data.status === "duplicate"){
-            loader.style.display = "none"
-            calendar.style.display = "grid"
-            alert("Sorry, this date was already booked.")
-            return
-        }
-
+    .then(() => {
         booked[selectedDate] = true
-        selectedElement.classList.remove('selected')
-        selectedElement.classList.add('booked')
+
+        if(selectedElement){
+            selectedElement.classList.remove('selected')
+            selectedElement.classList.add('booked')
+        }
 
         selectedDate = null
         selectedElement = null
